@@ -1,0 +1,19 @@
+{
+  "name": "pwarticles",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.7.0",
+    "dotenv": "^17.2.3"
+  },
+  "dependencies": {
+    "fakerator": "^0.3.6"
+  }
+}
