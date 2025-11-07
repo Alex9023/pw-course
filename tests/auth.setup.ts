@@ -1,6 +1,6 @@
 import { request, test as setup } from "@playwright/test";
 import { expect } from "@playwright/test";
-import { VALID_USER } from "../utils.config";
+import { UI_URL, VALID_USER } from "../utils.config";
 import { API_URL } from "../utils.config";
 import user from "../.auth/user.json";
 import fs from "fs";
@@ -30,6 +30,7 @@ setup("auth setup", async ({ request }) => {
   expect(signInResponse.status()).toEqual(200);
   const SignInResBody = await signInResponse.json();
   const accessToken = SignInResBody.user.token;
+  user.origins[0].origin = UI_URL;
   user.origins[0].localStorage[0].value = accessToken;
   fs.writeFileSync(authFile, JSON.stringify(user));
   process.env["ACCESS_TOKEN"] = accessToken;

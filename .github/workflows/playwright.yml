@@ -17,10 +17,23 @@ jobs:
         run: npm ci --force
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps --force
-      - name: Create .auth folder and dummy user.json
+      - name: Create .auth folder and file
         run: |
           mkdir -p .auth
-          echo '{ "token": "test-token", "user": "ci-user" }' > .auth/user.json
+          echo '{
+            "cookies": [],
+            "origins": [
+              {
+                "origin": "",
+                "localStorage": [
+                  {
+                    "name": "jwtToken",
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }' > .auth/user.json
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v4
