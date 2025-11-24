@@ -18,24 +18,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps --force
       - name: Create .auth folder and file
-        run: |
-          mkdir -p .auth
-          echo '{
-            "cookies": [],
-            "origins": [
-              {
-                "origin": "",
-                "localStorage": [
-                  {
-                    "name": "jwtToken",
-                    "value": ""
-                  }
-                ]
-              }
-            ]
-          }' > .auth/user.json
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --project uiTests
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

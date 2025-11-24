@@ -7,7 +7,7 @@ import fs from "fs";
 
 const authFile = ".auth/user.json";
 
-setup("auth setup", async ({ request }) => {
+setup("auth setup", async ({ browser, request }) => {
   // await page.goto("/");
   // await page.locator('[routerlink="/login"]', { hasText: "Sign In" }).click();
   // await page.locator('[formcontrolname="email"]').fill(VALID_USER.email);
@@ -29,9 +29,14 @@ setup("auth setup", async ({ request }) => {
   });
   expect(signInResponse.status()).toEqual(200);
   const SignInResBody = await signInResponse.json();
-  const accessToken = SignInResBody.user.token;
-  user.origins[0].origin = UI_URL;
-  user.origins[0].localStorage[0].value = accessToken;
-  fs.writeFileSync(authFile, JSON.stringify(user));
-  process.env["ACCESS_TOKEN"] = accessToken;
+  const token = SignInResBody.user.token;
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto(UI_URL);
+  await page.evaluate((token) => {
+    localStorage.setItem("jwtToken", token);
+  }, token);
+  await context.storageState({ path: authFile });
+  await context.close();
+  process.env["ACCESS_TOKEN"] = token;
 });
